@@ -12,6 +12,28 @@ Po zapojení senzoru do I2C sběrnice a zjištění jeho adresy je pomocí kniho
 měřena hodnota teploty a vlhkosti. Tyto veličiny jsou následně vypisovány na sériovou linku.<br>
 <br>
 
+## Napájecí obvod pro ESP
+**Obvod napájí ESP z baterie**<br>
+Baterie je připojena ke step-upu. Ten z proměnného napětí baterie vytvoří stabilních 5 Voltů, které jsou poté vedeny přes USB do ESP.
+
+## Napájení baterie ze solárního panelu
+**Tento obvod napájí jak baterii solárním panelem, tak ESP z baterie.**<br>
+Zde je využit také modul pro napájení baterie, ke kterému je připojen solární panel na vstup a baterie na výstup. Nabíjení baterie se indikuje LEDkou na modulu. Je-li baterie plně nabitá, svítí také druhá LEDka. Jako v úkolu 15a je baterie připojena na step-up. Ten zvýší napětí na 5 Voltů, kterými se napájí ESP.
+
+## Měření napětí baterie a indikování stavů
+**ESP měří napětí baterie, kterou přepočítá a následně posílá na lokální MQTT server, běžící na Raspberry. Na Raspberry se data zpracovávají a za pomoci LEDky se indikuje vybití baterie.**<br>
+Pro měření stavu kapacity baterie je baterie připojena na analogový pin ESP. ESP z tohoto pinu měří hodnotu, která je za pomoci napěťového děliče (zabudovaného rezistoru + 100k rezistor) přepočítána na napětí, když víme že 4.2V = 1023 (podle našeho napěťového děliče)<br>
+Takže jednoduše stačí namapovat hodnotu z analogu do napětí (4.2V = 1023, 0V = 0) a zároveň můžeme i mapovat měřenou hodnotu na kapacitu baterie.<br>
+<br>
+V meteostanici je integrovaná LEDioda, která nám blikáním indikuje, jak je baterie vybitá.<br>
+Pokud baterie má více než 30% kapacity, LEDioda je vyplá.<br>
+Pokud ale kapacita klesne pod 30%, LEDioda začně blikat a čím víc je vybitá, tím rychleji bliká.<br>
+<br>
+Kapacita a napětí baterie se posílají přes lokální MQTT server na Raspberry (ridiciCentralu).<br>
+Řídicí Centrála při aktualizaci odebíraného topicu ve funkci `on_local_message` zjistí, zda má baterie pod 30% kapacity,<br>
+a pokud ano, tak rozsvítí LEDiodu i na Řídicí centrále.<br>
+<br>
+
 ### Připojení ESP do lokální sítě pomocí WiFi
 **ESP se připojí na existující síť**<br>
 Meteostanice se při zapnutí snaží připojit k WiFi síti, kterou má nastavenou jako konstantu v hlavičce `main.cpp`.<br>
