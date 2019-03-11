@@ -1,24 +1,24 @@
 # Meteostation
 Meteostation (NodeMCU) &amp; Control Station (Raspberry Pi)
 
-### a) Senzor osvětlení BH1750
+### Senzor osvětlení BH1750
 **Čtení hodnoty v luxech a následný výpis do sériové linky**<br>
 Po zapojení senzoru do I2C sběrnice a zjištění jeho adresy, je pomocí knihovny `BH1750.h` <br>
 měřena hodnota osvětlení, která je následně zapisována na sériovou linku.<br>
 <br>
-### b) Senzor teploty a vlhkosti HTU21D
+### Senzor teploty a vlhkosti HTU21D
 **Čtení teploty a vlhkosti a následný výpis do sériové linky**<br>
 Po zapojení senzoru do I2C sběrnice a zjištění jeho adresy je pomocí knihovny `SparkFunHTU21D.h`,<br>
 měřena hodnota teploty a vlhkosti. Tyto veličiny jsou následně vypisovány na sériovou linku.<br>
 <br>
 
-### a) Připojení ESP do lokální sítě pomocí WiFi
+### Připojení ESP do lokální sítě pomocí WiFi
 **ESP se připojí na existující síť**<br>
 Meteostanice se při zapnutí snaží připojit k WiFi síti, kterou má nastavenou jako konstantu v hlavičce `main.cpp`.<br>
 O korektní připojení do sítě Wifi se stará funkce `setup_wifi`, jež využívá možností knihovny `ESP8266Wifi`.<br>
 Jejím úkolem je připojit desku do sítě, a nebo počkat do doby, kdy síť již dostupná bude.<br>
 <br>
-### b) Odesílání dat na Raspberry
+### Odesílání dat na Raspberry
 **Meteostanice odesíla data pomocí MQTT protokolu na lokalní MQTT broker na Raspberry.**<br>
 Meteostanice se po úspěšném připojení do sítě WiFi pokusí připojit na lokální MQTT broker,<br>
 který běží na Raspberry (Mosquitto broker).<br>
@@ -35,7 +35,7 @@ Například měrení světla je posláno pod topic `meteo1/light`. *(meteo1/temp
 Momentálně není odebírání zpráv z MQTT brokeru nijak využíváno, ale je plně implementováno.<br>
 A to ve funkci `callback`, která se zavolá pokaždé když se aktualizuje odebíraný topic.<br>
 <br>
-### c) Zobrazení dat na displeji Raspberry
+### Zobrazení dat na displeji Raspberry
 **RidiciCentrala odebírá topicy meteostanice a následně přečtené hodnoty vypisuje na displej.**<br>
 Podobně jako u meteostanice jsou zde přítomny dvě nové funkce:<br>
 1. Funkce `on_local_connect`, která pouze vypíše kontrolní hlášku a znovu začne odebírat topicy meteostanice `meteo1/#`.<br>
